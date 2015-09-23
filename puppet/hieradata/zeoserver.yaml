@@ -1,0 +1,8 @@
+#zeoserver.yaml
+---
+
+classes:
+ - plone
+
+plone::type: 'zeo'
+plone::create_default_inst: true

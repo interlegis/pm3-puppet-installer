@@ -1,0 +1,8 @@
+#common.yaml
+---
+
+classes:
+ - pm3::appserver
+
+pm3::appserver::zeo_ip: "%{::db_host}:8100"
+pm3::appserver::numberInstances: 1
