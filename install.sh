@@ -33,7 +33,7 @@ confirm()
     return 1
 }
 
-ZEOIP=
+ZEOIP="127.0.0.1"
 ZEOONLY=false
 CLIENTN=1
 VERBOSE=
@@ -98,8 +98,8 @@ installzeo()
 installzeoclient()
 {
   echo "server_role=appserver" > /etc/facter/facts.d/role.txt
-  echo "db_host=127.0.0.1" >> /etc/facter/facts.d/role.txt
-  echo "number_instances=1" >> /etc/facter/facts.d/role.txt
+  echo "db_host=$ZEOIP" >> /etc/facter/facts.d/role.txt
+  echo "number_instances=$CLIENTN" >> /etc/facter/facts.d/role.txt
   puppetmodules
   echo "Installing Portal Modelo Application Server..."
   puppet apply /etc/puppet/manifests/site.pp   
@@ -151,6 +151,7 @@ else
     installzeoclient 
   else
     confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo [y|N]?"
+    installzeoclient
     prereq
   fi
 fi
