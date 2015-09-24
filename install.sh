@@ -12,6 +12,7 @@ OPTIONS:
    -h      Show this message
    -z      Installs ZEO database server only.
    -a      IP Address of the ZEO Server, in case of a ZEO Client only server.
+   -n      Number of ZEO Clients to deploy. Defaults to 1.
    -v      Verbose
 EOF
 }
@@ -34,8 +35,9 @@ confirm()
 
 ZEOIP=
 ZEOONLY=false
+CLIENTN=1
 VERBOSE=
-while getopts “hza:v” OPTION
+while getopts “hzna:v” OPTION
 do
      case $OPTION in
          h)
@@ -44,6 +46,9 @@ do
              ;;
          a)
              ZEOIP=$OPTARG
+             ;;
+         n)
+             CLIENTN=$OPTARG
              ;;
          z)
              ZEOONLY=true
@@ -74,14 +79,31 @@ prereq()
   mkdir -p /etc/facter/facts.d 
 }
 
-installzeo()
+puppetmodules()
 {
-  echo "server_role=zeoserver" > /etc/facter/facts.d/role.txt
   echo "Installing Puppet modules..."
   cd /etc/puppet
   r10k puppetfile install
-  echo "Installing ZEO Server..."
+}
+
+installzeo()
+{
+  echo "server_role=zeoserver" > /etc/facter/facts.d/role.txt
+  puppetmodules
+  echo "Installing ZEO Database Server..."
+  puppet apply /etc/puppet/manifests/site.pp
+  echo "Puppet run finished."  
+}
+
+installzeoclient()
+{
+  echo "server_role=appserver" > /etc/facter/facts.d/role.txt
+  echo "db_host=127.0.0.1" >> /etc/facter/facts.d/role.txt
+  echo "number_instances=1" >> /etc/facter/facts.d/role.txt
+  puppetmodules
+  echo "Installing Portal Modelo Application Server..."
   puppet apply /etc/puppet/manifests/site.pp   
+  
 }
 
 # Check Operating System
@@ -123,10 +145,12 @@ then
 else
   if [[ -z $ZEOSERVER ]]
   then 
-    confirm "Do you want to install a Portal Modelo all-in-one server [y|N]?"
+    confirm "Do you want to install a Portal Modelo all-in-one server with $CLIENTN instance(s) [y|N]?"
     prereq
+    installzeo
+    installzeoclient 
   else
-    confirm "Do you want to install a ZEO Client Only Portal Modelo server [y|N]?"
+    confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo [y|N]?"
     prereq
   fi
 fi

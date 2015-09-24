@@ -5,4 +5,6 @@ classes:
  - plone
 
 plone::type: 'zeo'
-plone::create_default_inst: true
+plone::instances:
+  server:
+    port: 2500
