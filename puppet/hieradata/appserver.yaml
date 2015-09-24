@@ -4,5 +4,6 @@
 classes:
  - pm3::appserver
 
-pm3::appserver::zeo_ip: "%{::db_host}:8100"
-pm3::appserver::numberInstances: 1
+pm3::appserver::zeo_ip: "%{::db_host}"
+pm3::appserver::zeo_port: 2500
+pm3::appserver::numberInstances: "%{::number_instances}"
