@@ -37,7 +37,7 @@ ZEOIP="127.0.0.1"
 ZEOONLY=false
 CLIENTN=1
 VERBOSE=
-while getopts “hzna:v” OPTION
+while getopts “hzn:a:v” OPTION
 do
      case $OPTION in
          h)
