@@ -92,7 +92,12 @@ installzeo()
   puppetmodules
   echo "Installing ZEO Database Server..."
   puppet apply /etc/puppet/manifests/site.pp
-  echo "Puppet run finished."  
+  if [ $? -eq 0 ]; then
+    echo "ZEO Server should be listening at port 2500."
+  else
+    echo "An error ocurred while installing the ZEO Server."
+    exit 1
+  fi
 }
 
 installzeoclient()
@@ -103,7 +108,15 @@ installzeoclient()
   puppetmodules
   echo "Installing Portal Modelo Application Server..."
   puppet apply /etc/puppet/manifests/site.pp   
-  
+  if [ $? -eq 0 ]; then
+    echo "Portal Modelo instances installation suceeded. Listening ports:"
+    netstat -tunap |grep python|grep 81..
+    echo "Default admin password is admin."
+  else
+    echo "An error ocurred while installing the Application Server."
+    exit 1
+  fi
+ 
 }
 
 # Check Operating System
