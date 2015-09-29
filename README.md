@@ -11,6 +11,7 @@ OPTIONS:
    -z      Installs ZEO database server only.
    -a      IP Address of the ZEO Server, in case of a ZEO Client only server.
    -n      Number of ZEO Clients to deploy. Defaults to 1.
+   -y      Do not ask. Just do.
    -v      Verbose
 
 ```

@@ -13,7 +13,7 @@ OPTIONS:
    -z      Installs ZEO database server only.
    -a      IP Address of the ZEO Server, in case of a ZEO Client only server.
    -n      Number of ZEO Clients to deploy. Defaults to 1.
-   -v      Verbose
+   -y      Do not ask. Just do.
 EOF
 }
 
@@ -36,8 +36,9 @@ confirm()
 ZEOIP="127.0.0.1"
 ZEOONLY=false
 CLIENTN=1
-VERBOSE=
-while getopts “hzn:a:v” OPTION
+YESTOALL=false
+
+while getopts “hzn:a:yv” OPTION
 do
      case $OPTION in
          h)
@@ -53,8 +54,8 @@ do
          z)
              ZEOONLY=true
              ;;
-         v)
-             VERBOSE=1
+         y)
+             YESTOALL=true
              ;;
          ?)
              usage
@@ -152,18 +153,24 @@ fi
 set -o errexit
 if $ZEOONLY 
 then
-  confirm "Do you want to install only the Portal Modelo ZEO Database server [y|N]?"
+  if [ "$YESTOALL" == false ]; then
+    confirm "Do you want to install only the Portal Modelo ZEO Database server [y|N]?"
+  fi 
   prereq
   installzeo
 else
   if [[ -z $ZEOSERVER ]]
   then 
-    confirm "Do you want to install a Portal Modelo all-in-one server with $CLIENTN instance(s) [y|N]?"
+    if [ "$YESTOALL" == false ]; then
+      confirm "Do you want to install a Portal Modelo all-in-one server with $CLIENTN instance(s) [y|N]?"
+    fi
     prereq
     installzeo
     installzeoclient 
   else
-    confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo [y|N]?"
+    if [ "$YESTOALL" == false ]; then
+      confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo [y|N]?"
+    fi
     installzeoclient
     prereq
   fi
