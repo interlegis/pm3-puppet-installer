@@ -144,12 +144,6 @@ then
   echo "$OS $VER system not supported. Currently tested only in Ubuntu 14.04 LTS (Trusty Tahr)."
 fi
 
-#if [[ -z $ZEOSERVER ]] 
-#then
-#     usage
-#     exit 1
-#fi
-
 set -o errexit
 if $ZEOONLY 
 then
@@ -159,7 +153,7 @@ then
   prereq
   installzeo
 else
-  if [[ -z $ZEOSERVER ]]
+  if [ "$ZEOIP" == "127.0.0.1" ]
   then 
     if [ "$YESTOALL" == false ]; then
       confirm "Do you want to install a Portal Modelo all-in-one server with $CLIENTN instance(s) [y|N]?"
@@ -169,7 +163,7 @@ else
     installzeoclient 
   else
     if [ "$YESTOALL" == false ]; then
-      confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo [y|N]?"
+      confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo, with a ZEO Server at $ZEOIP [y|N]?"
     fi
     installzeoclient
     prereq
