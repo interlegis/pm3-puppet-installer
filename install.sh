@@ -70,7 +70,9 @@ prereq()
   echo Installing prerequisites, Puppet and Git...
   apt-get update > /dev/null 2>&1
   apt-get install -y git puppet > /dev/null 2>&1
-  gem install r10k > /dev/null 2>&1
+  if ! type "r10k" > /dev/null; then
+    gem install r10k > /dev/null 2>&1
+  fi
   
   mkdir -p /etc/puppet/hieradata
   cp -f puppet/hiera.yaml /etc/puppet/
@@ -165,6 +167,7 @@ else
     if [ "$YESTOALL" == false ]; then
       confirm "Do you want to install $CLIENTN ZEO Client instances for Portal Modelo, with a ZEO Server at $ZEOIP [y|N]?"
     fi
+    prereq
     installzeoclient
     prereq
   fi
