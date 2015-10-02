@@ -13,6 +13,7 @@ OPTIONS:
    -z      Installs ZEO database server only.
    -a      IP Address of the ZEO Server, in case of a ZEO Client only server.
    -n      Number of ZEO Clients to deploy. Defaults to 1.
+   -p      Do not try to install a default Plone site.
    -y      Do not ask. Just do.
 EOF
 }
@@ -37,8 +38,9 @@ ZEOIP="127.0.0.1"
 ZEOONLY=false
 CLIENTN=1
 YESTOALL=false
+CREATEPORTAL=true
 
-while getopts “hzn:a:yv” OPTION
+while getopts “hzn:a:yp” OPTION
 do
      case $OPTION in
          h)
@@ -56,6 +58,9 @@ do
              ;;
          y)
              YESTOALL=true
+             ;;
+         p)
+             CREATEPORTAL=false
              ;;
          ?)
              usage
@@ -108,6 +113,7 @@ installzeoclient()
   echo "server_role=appserver" > /etc/facter/facts.d/role.txt
   echo "db_host=$ZEOIP" >> /etc/facter/facts.d/role.txt
   echo "number_instances=$CLIENTN" >> /etc/facter/facts.d/role.txt
+  echo "create_portal=$CREATEPORTAL" >> /etc/facter/facts.d/role.txt
   puppetmodules
   echo "Installing Portal Modelo Application Server..."
   puppet apply /etc/puppet/manifests/site.pp   

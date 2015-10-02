@@ -13,6 +13,7 @@ OPTIONS:
    -z      Installs ZEO database server only.
    -a      IP Address of the ZEO Server, in case of a ZEO Client only server.
    -n      Number of ZEO Clients to deploy. Defaults to 1.
+   -p      Do not try to install a default Plone site.
    -y      Do not ask. Just do.
 
 ```

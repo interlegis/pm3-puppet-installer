@@ -8,3 +8,4 @@ pm3::appserver::zeo_ip: "%{::db_host}"
 pm3::appserver::zeo_port: 2500
 pm3::appserver::numberInstances: "%{::number_instances}"
 pm3::appserver::bout_cache_file: "http://arquivos.interlegis.leg.br/interlegis/produtos/pacotes/buildout-cache.tar.gz"
+pm3::appserver::default_portal: "%{::create_portal}"
